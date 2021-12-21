@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "/Users/avis/Documents/application/Log-Tracker/Log Tracker/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-id/values-id.xml",
+            "map": [
+                {
+                    "source": "/Users/avis/.gradle/caches/transforms-2/files-2.1/9bf39044c248d46d4ca8a663fe13df36/jetified-zxing-android-embedded-4.2.0/res/values-id/values-id.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,114,161,293",
+                        "endColumns": "58,46,131,108",
+                        "endOffsets": "109,156,288,397"
+                    }
+                }
+            ]
+        }
+    ]
+}

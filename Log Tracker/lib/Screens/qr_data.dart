@@ -9,6 +9,7 @@ import 'package:log_tracker/Utilities/screen_utils.dart';
 import 'package:log_tracker/main.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
 class QrDataScreen extends StatefulWidget {
   final String? qrData;
@@ -34,21 +35,22 @@ class _QrDataScreenState extends State<QrDataScreen> {
     {
       getPrefValues();
     }
-    selfieController?.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    });
+
     super.initState();
   }
 
   @override
   void dispose() {
     if(selfieController!=null) {
-      selfieController.dispose();
+      //selfieController.dispose();
     }
     super.dispose();
+  }
+  
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    super.deactivate();
   }
 
   void getPrefValues() async {
@@ -124,7 +126,7 @@ class _QrDataScreenState extends State<QrDataScreen> {
                         onPressed: (){
                           if (file!=null)
                             {
-                              selfieController != null && selfieController.value.isInitialized ?
+                              selfieController != null?
                               onTakePictureButtonPressed()
                                   : null;
                               if(selfieFile!=null)
@@ -156,22 +158,29 @@ class _QrDataScreenState extends State<QrDataScreen> {
   }
 
   void onTakePictureButtonPressed() {
-    print("IN TAKE PIC");
-    takePicture().then((XFile? file1) {
-      if (mounted) {
-        setState(() {
-          selfieFile = file1;
-        });
-        if (file1 != null) {
-          print("CAPTURED_SELFIE");
-          final logPicBytes = File(file!.path).readAsBytesSync();
-          final selfieBytes = File(selfieFile!.path).readAsBytesSync();
-          String dateTime = DateTime.now().toString();
-          print("date $dateTime");
-          insertIntoDb(base64Encode(logPicBytes),base64Encode(selfieBytes),widget.qrData??dataInQr,dateTime);
+    selfieController.initialize().then((_) {
+      print("INITIALISED");
+      takePicture().then((XFile? file1) {
+        if (mounted) {
+          setState(() {
+            selfieFile = file1;
+          });
+          if (file1 != null) {
+            print("CAPTURED_SELFIE");
+
+            final logPicBytes = File(file!.path).readAsBytesSync();
+            final selfieBytes = File(selfieFile!.path).readAsBytesSync();
+            String dateTime = DateTime.now().toString();
+            print("date $dateTime");
+            insertIntoDb(base64Encode(logPicBytes),base64Encode(selfieBytes),widget.qrData??dataInQr,dateTime);
+          }
         }
-      }
+      });
+      setState(() {
+
+      });
     });
+    print("IN TAKE PIC");
   }
 
   Future<XFile?> takePicture() async {
@@ -208,8 +217,11 @@ class _QrDataScreenState extends State<QrDataScreen> {
     print("Data_to_insert $log_image, $selfie, $data, $date");
     await db.execute("CREATE TABLE IF NOT EXISTS LOGS(id INTEGER PRIMARY KEY, machine_image TEXT, selfie_image TEXT, log_data TEXT, date VARCHAR(20))");
     print("table create -> logs");
-    int length = await db.execute("SELECT COUNT(*) FROM LOGS;");
-    await db.insert("LOGS", {length+1,"$log_image","$selfie","$data","$date"});
+    var length = Sqflite
+        .firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM LOGS'));
+
+    await db.rawInsert("INSERT INTO LOGS VALUES(${length!+1},${log_image},${selfie},${data},${date})");
+    await db.insert("LOGS", {});
   }
 
 }

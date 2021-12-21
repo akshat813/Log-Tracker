@@ -100,7 +100,6 @@ class _CameraPageState extends State<CameraPage> {
 
 
    void onTakePictureButtonPressed() {
-    print("IN TAKE PIC");
      takePicture().then((XFile? file) {
        if (mounted) {
          setState(() {
