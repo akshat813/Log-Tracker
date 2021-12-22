@@ -45,15 +45,15 @@ class _ScanQrScreenState extends State<ScanQrScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  const Text('Scan a code',style: TextStyle(fontSize: 12),),
+                  const Text('Scan a code',style: TextStyle(fontSize: 7),),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Container(
                         margin: const EdgeInsets.all(8),
-                        height: 20,
-                        width: 80,
+                        height: 18,
+                        width: 60,
                         child: MaterialButton(
                             color: Colors.black,
                             onPressed: () async {
@@ -63,14 +63,14 @@ class _ScanQrScreenState extends State<ScanQrScreen> {
                             child: FutureBuilder(
                               future: qrController?.getFlashStatus(),
                               builder: (context, snapshot) {
-                                return snapshot.data=="true"? const Text('Flash:On',style: TextStyle(color: Colors.white),):
-                                const Text('Flash:Off',style: TextStyle(color: Colors.white,fontSize: 10),);
+                                return snapshot.data=="true"? const Text('Flash:On',style: TextStyle(color: Colors.white,fontSize: 6),):
+                                const Text('Flash:Off',style: TextStyle(color: Colors.white,fontSize: 6),);
                               },
                             )),
                       ),
                       Container(
-                        height: 20,
-                        width: 70,
+                        height: 18,
+                        width: 60,
                         margin: const EdgeInsets.all(8),
                         child: MaterialButton(
                             color: Colors.black,
@@ -82,9 +82,9 @@ class _ScanQrScreenState extends State<ScanQrScreen> {
                               future: qrController?.getCameraInfo(),
                               builder: (context, snapshot) {
                                 if (snapshot.data != null) {
-                                  return const Text("Rotate",style: TextStyle(color: Colors.white,fontSize: 10),);
+                                  return const Text("Rotate",style: TextStyle(color: Colors.white,fontSize: 6),);
                                 } else {
-                                  return const Text('loading',style: TextStyle(color: Colors.white));
+                                  return const Text('loading',style: TextStyle(color: Colors.white,fontSize: 6));
                                 }
                               },
                             )),

@@ -5,6 +5,7 @@ import 'package:log_tracker/Screens/register_user.dart';
 import 'package:log_tracker/Utilities/screen_utils.dart';
 import 'package:log_tracker/main.dart';
 import 'package:path/path.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sqflite/sqflite.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -28,6 +29,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   void getCameras() async
   {
+    await [Permission.camera, Permission.microphone].request();
     cameras = await availableCameras();
   }
 

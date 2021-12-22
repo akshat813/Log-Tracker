@@ -81,34 +81,45 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
                 controller: emailIdCont,
               ),
               const SizedBox(height: 10,),
-              Container(
-                alignment: Alignment.center,
-                child: const Text("User type",style: TextStyle(fontSize: 16),),
+              const Center(
+                child: Text("User type",style: TextStyle(fontSize: 16),
+                ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ListTile(
-                    title: const Text("Admin"),
-                    leading: Radio(
-                      value: 'Admin',
-                      groupValue: radioGroup,
-                      onChanged: (value){
-                        radioGroup = value.toString();
-                      },
+                  Expanded(
+                    child: Row(
+                      children: [
+                        const Text("Admin"),
+                        Radio(
+                          value: 'Admin',
+                          groupValue: radioGroup,
+                          onChanged: (value){
+                            radioGroup = value.toString();
+                            setState(() {
+                            });
+                          },
+                        ),
+                      ],
                     ),
                   ),
-                  ListTile(
-                    title: const Text("User"),
-                    leading: Radio(
-                      value: 'User',
-                      groupValue: radioGroup,
-                      onChanged: (value){
-                        radioGroup = value.toString();
-                      },
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Text("User"),
+                        Radio(
+                          value: 'User',
+                          groupValue: radioGroup,
+                          onChanged: (value){
+                            radioGroup = value.toString();
+                            setState(() {
+                            });
+                          },
+                        ),
+                      ],
                     ),
                   ),
-
                 ],
               ),
               TextField(

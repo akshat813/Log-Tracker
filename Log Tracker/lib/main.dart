@@ -15,8 +15,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Permission.camera.request();
-    Permission.microphone.request();
     return MaterialApp(
       title: 'Log Tracker',
       theme: ThemeData(

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:log_tracker/Constants/preferences.dart';
 import 'package:log_tracker/Screens/capture_log_data.dart';
+import 'package:log_tracker/Screens/captured_details.dart';
 import 'package:log_tracker/Utilities/screen_utils.dart';
 import 'package:log_tracker/main.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -174,6 +175,7 @@ class _QrDataScreenState extends State<QrDataScreen> {
             String dateTime = DateTime.now().toString();
             print("date $dateTime");
             insertIntoDb(base64Encode(logPicBytes),base64Encode(selfieBytes),widget.qrData??dataInQr,dateTime);
+            Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context)=>CapturedDetailsScreen(file: file!, data: widget.qrData??dataInQr??"")), (route) => false);
           }
         }
       });
@@ -223,6 +225,7 @@ class _QrDataScreenState extends State<QrDataScreen> {
 
     Fluttertoast.showToast(msg: "data inserted in db");
     String selfie="abc";
+    String log_image="abc";
     String data="cde";
     String date="efg";
     await db.rawInsert("INSERT INTO LOGS VALUES(${length!+1},${log_image},${selfie},${data},${date})");
