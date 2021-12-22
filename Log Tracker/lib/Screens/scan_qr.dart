@@ -125,15 +125,15 @@ class _ScanQrScreenState extends State<ScanQrScreen> {
     setState(() {
       qrController = controller;
     });
-    controller.scannedDataStream.listen((scanData) {
-      setState(() async {
+    controller.scannedDataStream.listen((scanData) async {
+      setState(() {
         setPrefValues(scanData!.code.toString());
         result = scanData;
         print("NAVIGATE");
-        await qrController!.pauseCamera();
-        qrController!.dispose();
-        Navigator.push(context,MaterialPageRoute(builder: (context)=>QrDataScreen(qrData: result!.code)));
       });
+      await qrController!.pauseCamera();
+      qrController!.dispose();
+      Navigator.push(context,MaterialPageRoute(builder: (context)=>QrDataScreen(qrData: result!.code)));
     });
   }
 

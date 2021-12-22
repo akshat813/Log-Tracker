@@ -15,7 +15,7 @@ class CameraPage extends StatefulWidget {
 }
 
 class _CameraPageState extends State<CameraPage> {
-   CameraController controller = CameraController(cameras[0], ResolutionPreset.medium);
+   CameraController controller = CameraController(cameras[0], ResolutionPreset.low);
    XFile? imageFile;
 
   @override
@@ -100,7 +100,6 @@ class _CameraPageState extends State<CameraPage> {
 
 
    void onTakePictureButtonPressed() {
-    print("IN TAKE PIC");
      takePicture().then((XFile? file) {
        if (mounted) {
          setState(() {
