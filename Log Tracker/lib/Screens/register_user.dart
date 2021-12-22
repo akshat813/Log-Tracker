@@ -88,19 +88,25 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Radio(
-                    value: 'Admin',
-                    groupValue: radioGroup,
-                    onChanged: (value){
-                      radioGroup = value.toString();
-                    },
+                  ListTile(
+                    title: const Text("Admin"),
+                    leading: Radio(
+                      value: 'Admin',
+                      groupValue: radioGroup,
+                      onChanged: (value){
+                        radioGroup = value.toString();
+                      },
+                    ),
                   ),
-                  Radio(
-                    value: 'User',
-                    groupValue: radioGroup,
-                    onChanged: (value){
-                      radioGroup = value.toString();
-                    },
+                  ListTile(
+                    title: const Text("User"),
+                    leading: Radio(
+                      value: 'User',
+                      groupValue: radioGroup,
+                      onChanged: (value){
+                        radioGroup = value.toString();
+                      },
+                    ),
                   ),
 
                 ],

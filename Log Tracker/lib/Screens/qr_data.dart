@@ -149,7 +149,8 @@ class _QrDataScreenState extends State<QrDataScreen> {
                     ],
                   )
                 ],
-              )
+              ),
+              selfieFile!=null? Image.file(selfieFile.path)
             ],
           ),
         ),
@@ -220,8 +221,12 @@ class _QrDataScreenState extends State<QrDataScreen> {
     var length = Sqflite
         .firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM LOGS'));
 
+    String selfie="abc";
+    String data="cde";
+    String date="efg";
     await db.rawInsert("INSERT INTO LOGS VALUES(${length!+1},${log_image},${selfie},${data},${date})");
-    await db.insert("LOGS", {});
+    print("Record_Inserted_In_Logs_SQLITE");
+    //await db.insert("LOGS", {});
   }
 
 }
