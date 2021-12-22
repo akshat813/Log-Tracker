@@ -15,7 +15,7 @@ class CameraPage extends StatefulWidget {
 }
 
 class _CameraPageState extends State<CameraPage> {
-   CameraController controller = CameraController(cameras[0], ResolutionPreset.medium);
+   CameraController controller = CameraController(cameras[0], ResolutionPreset.low);
    XFile? imageFile;
 
   @override

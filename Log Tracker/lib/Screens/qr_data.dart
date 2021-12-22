@@ -24,7 +24,7 @@ class _QrDataScreenState extends State<QrDataScreen> {
 
   XFile? file;
 
-  CameraController selfieController = CameraController(cameras[1], ResolutionPreset.medium);
+  CameraController selfieController = CameraController(cameras[1], ResolutionPreset.low);
   XFile? selfieFile;
 
   @override
@@ -129,18 +129,18 @@ class _QrDataScreenState extends State<QrDataScreen> {
                               selfieController != null?
                               onTakePictureButtonPressed()
                                   : null;
-                              if(selfieFile!=null)
-                                {
-                                  //NAVIGATE TO DETAILS PAGE AND SAVE IN DB
-                                }
-                              else
-                                {
-                                  Fluttertoast.showToast(msg: "Try later",backgroundColor: Colors.red);
-                                }
+                              // if(selfieFile!=null)
+                              //   {
+                              //     //NAVIGATE TO DETAILS PAGE AND SAVE IN DB
+                              //   }
+                              // else
+                              //   {
+                              //     Fluttertoast.showToast(msg: "Try later",backgroundColor: Colors.red);
+                              //   }
                             }
                           else
                             {
-                              Fluttertoast.showToast(msg: "No log image",backgroundColor: Colors.red);
+                              Fluttertoast.showToast(msg: "Capture log first",backgroundColor: Colors.red);
                             }
                         },
                         color: Colors.black,
@@ -150,7 +150,7 @@ class _QrDataScreenState extends State<QrDataScreen> {
                   )
                 ],
               ),
-              selfieFile!=null? Image.file(selfieFile.path)
+              selfieFile!=null? Image.file(File(selfieFile!.path)) : Container()
             ],
           ),
         ),
@@ -215,12 +215,13 @@ class _QrDataScreenState extends State<QrDataScreen> {
 
   void insertIntoDb(String log_image, String selfie, String data, String date) async
   {
-    print("Data_to_insert $log_image, $selfie, $data, $date");
+    //print("Data_to_insert $log_image, $selfie, $data, $date");
     await db.execute("CREATE TABLE IF NOT EXISTS LOGS(id INTEGER PRIMARY KEY, machine_image TEXT, selfie_image TEXT, log_data TEXT, date VARCHAR(20))");
     print("table create -> logs");
     var length = Sqflite
         .firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM LOGS'));
 
+    Fluttertoast.showToast(msg: "data inserted in db");
     String selfie="abc";
     String data="cde";
     String date="efg";
