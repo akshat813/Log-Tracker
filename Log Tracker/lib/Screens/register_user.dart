@@ -160,11 +160,11 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
                     borderRadius: BorderRadius.circular(20)
                 ),
                 child: MaterialButton(onPressed: (){
-                  if(userNameCont.text==null || designationCont.text==null ||
-                      departmentCont.text==null || radioGroup==null || radioGroup=="" || passCont.text==null
-                   || confirmPassCont.text==null)
+                  if(userNameCont.text=="" || designationCont.text=="" ||
+                      departmentCont.text=="" || radioGroup=="" || radioGroup=="" || passCont.text==""
+                   || confirmPassCont.text=="")
                     {
-                      Fluttertoast.showToast(msg: "Required fields empty!",backgroundColor: Colors.red);
+                      Fluttertoast.showToast(msg: "Required fields empty",backgroundColor: Colors.red);
                       return;
                     }
                   if(passCont.text.trim()!=confirmPassCont.text.trim())

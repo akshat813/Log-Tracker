@@ -57,6 +57,19 @@ class _SignInScreenState extends State<SignInScreen> {
           await db.rawInsert("INSERT INTO LOG_USERS VALUES('user1','1234@','1234','admin')");
           await db.rawInsert("INSERT INTO LOG_USERS VALUES('user2','1234@','1234','user')");
           print("ADMIN_USERS_INSERTED");
+          if(users.isEmpty)
+            {
+              List<Map> userList = await db.rawQuery('SELECT * FROM LOG_USERS');
+              users = [];
+              for (int i = 0; i < userList.length; i++) {
+                users.add(User(
+                    userName: userList[i]["USERNAME"].toString(),
+                    email: userList[i]["EMAIL"].toString(),
+                    password: userList[i]["PASSWORD"].toString(),
+                    userType: userList[i]["USER_TYPE"].toString()
+                ));
+              }
+            }
         }
       else
         {
@@ -121,15 +134,24 @@ class _SignInScreenState extends State<SignInScreen> {
                     onPressed: (){
                   String id = userNameCont.text.trim();
                   String pass = passCont.text.trim();
+                  if(userNameCont.text=="" || passCont.text=="")
+                    {
+                      print("Empty");
+                      Fluttertoast.showToast(msg: "Fields cannot be empty",backgroundColor: Colors.red);
+                      return;
+                    }
+                  print("NON EMPTY");
+                  print("LEN ${users.length}");
                   for(int i = 0; i< users.length;i++)
                     {
-                      if(users[i].userName== id)
+                      if(users[i].userName == id)
                         {
                           if(users[i].password==pass)
                             {
                               accountType = users[i].userType;
                               accountUserName = users[i].userName;
                               setPrefValue(users[i].userType);
+                              loggedIn = true;
                               Navigator.push(context, MaterialPageRoute(builder: (context)=> Dashboard()));
                               break;
                             }
@@ -139,6 +161,10 @@ class _SignInScreenState extends State<SignInScreen> {
                               print("Invalid password entered");
                               return;
                             }
+                        }
+                      else
+                        {
+                          print("USERS $users");
                         }
                     }
                   },
@@ -159,5 +185,6 @@ class _SignInScreenState extends State<SignInScreen> {
     prefs.setString(USERNAME,userNameCont.text.trim());
     prefs.setString(PASSWORD,passCont.text.trim());
     prefs.setString(ACCOUNT_TYPE,type!);
+    prefs.setBool(LOGGED_IN, true);
   }
 }

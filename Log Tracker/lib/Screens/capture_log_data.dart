@@ -78,7 +78,7 @@ class _CameraPageState extends State<CameraPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               MaterialButton(onPressed: (){
-                // Navigator.pop(context);
+                Navigator.pop(context);
                 imageFile ==null;
               },
                 color: Colors.black,

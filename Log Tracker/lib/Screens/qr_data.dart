@@ -89,7 +89,7 @@ class _QrDataScreenState extends State<QrDataScreen> {
                 children: [
                   const SizedBox(height: 10,),
                   Container(alignment:Alignment.topLeft,child: const Text("Log Data",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),)),
-                  file!=null ? Image.file(File(file!.path),height: ScreenUtils.screenHeight(context)*0.5,width: ScreenUtils.screenWidth(context)*0.7,) : Container(),
+                  file!=null ? Image.file(File(file!.path),height: ScreenUtils.screenHeight(context)*0.5,width: ScreenUtils.screenWidth(context)*0.7,) : Container(height: 50,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -148,7 +148,8 @@ class _QrDataScreenState extends State<QrDataScreen> {
                         child: const Text("Submit",style: TextStyle(color: Colors.white),),
                       )
                     ],
-                  )
+                  ),
+                  const SizedBox(height: 40,)
                 ],
               ),
               selfieFile!=null? Image.file(File(selfieFile!.path)) : Container()
@@ -174,6 +175,8 @@ class _QrDataScreenState extends State<QrDataScreen> {
             final selfieBytes = File(selfieFile!.path).readAsBytesSync();
             String dateTime = DateTime.now().toString();
             print("date $dateTime");
+            print("logFile ${base64Encode(logPicBytes)}");
+            print(base64Encode(logPicBytes).length);
             insertIntoDb(base64Encode(logPicBytes),base64Encode(selfieBytes),widget.qrData??dataInQr,dateTime);
             Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context)=>CapturedDetailsScreen(file: file!, selfie: selfieFile!,data: widget.qrData??dataInQr??"")), (route) => false);
           }

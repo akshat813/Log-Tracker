@@ -15,6 +15,8 @@ class Dashboard extends StatelessWidget {
   {
     prefs = await SharedPreferences.getInstance();
     accountType = prefs.getString(ACCOUNT_TYPE).toString();
+    accountUserName=prefs.getString(USERNAME).toString();
+
   }
 
   @override
@@ -27,30 +29,24 @@ class Dashboard extends StatelessWidget {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
-          title: const Center(child: Text("Home")),
+          title: const Center(child: Text("Home",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),)),
           actions: [
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Row(
                   children: [
-                    accountType!="" && accountType=="admin"?
-                    InkWell(
-                      onTap: (){
-                        Navigator.push(context,MaterialPageRoute(builder: (context)=>const RegisterUserScreen()));
-                      },
-                      child: const Text("Add New User",style: TextStyle(fontSize: 15),),
-                    )
-                    :
-                    Container(),
                     const SizedBox(width:20,),
                     InkWell(
-                      onTap: (){
+                      onTap: () async{
                         accountType="";
                         accountUserName="";
+                        prefs = await SharedPreferences.getInstance();
                         prefs.setString(USERNAME,"");
                         prefs.setString(PASSWORD,"");
                         prefs.setString(ACCOUNT_TYPE,"");
+                        prefs.setBool(LOGGED_IN, false);
+                        loggedIn = false;
                         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>const SignInScreen()), (route) => false);
                       },
                       child: const Text("Logout",style: TextStyle(fontSize: 15),),
@@ -60,6 +56,7 @@ class Dashboard extends StatelessWidget {
               ],
             )
           ],
+          leading: Container(),
         ),
         body: SingleChildScrollView(
           child: Center(
@@ -68,7 +65,7 @@ class Dashboard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children : [
                 const SizedBox(height: 120,),
-                accountType!="" && accountType=="admin"?
+                accountType!="" && accountType!="admin"?
                 Ink(
                   height: ScreenUtils.screenHeight(context)*0.2,
                   width: ScreenUtils.screenWidth(context)*0.5,
@@ -92,6 +89,18 @@ class Dashboard extends StatelessWidget {
                     },
                   ),
                 ),
+                const SizedBox(height: 100,),
+                accountType!="" && accountType=="admin"?
+                MaterialButton(
+                  minWidth: ScreenUtils.screenWidth(context)*0.7,
+                  onPressed: (){
+                    Navigator.push(context,MaterialPageRoute(builder: (context)=>const RegisterUserScreen()));
+                  },
+                  color: Colors.black,
+                  child: const Text("Add New User",style: TextStyle(fontSize: 18,color: Colors.white),)
+                )
+                    :
+                Container(),
               ]
             ),
           ),
@@ -104,27 +113,36 @@ class Dashboard extends StatelessWidget {
   {
     return AlertDialog(
       title: const Text("Upload File!"),
-      content: Column(
-        children: [
-          Ink(
-            child: InkWell(
-              onTap: (){
-                Navigator.push(buildContext,MaterialPageRoute(builder: (context)=>
-                const ScanQrScreen()
-                ));
-              },
-              child: const Text("Take Photo"),
+      content: Container(
+        height: ScreenUtils.screenHeight(buildContext)*0.1,
+        width: ScreenUtils.screenWidth(buildContext)*0.6,
+        child: Column(
+          children: [
+            Ink(
+              height: ScreenUtils.screenHeight(buildContext)*0.03,
+              width: ScreenUtils.screenWidth(buildContext)*0.4,
+              child: InkWell(
+                onTap: (){
+                  Navigator.push(buildContext,MaterialPageRoute(builder: (context)=>
+                  const ScanQrScreen()
+                  ));
+                },
+                child: Center(child: const Text("Take Photo",style: TextStyle(fontSize: 18),)),
+              ),
             ),
-          ),
-          Ink(
-            child: InkWell(
-              onTap: (){
-                Navigator.pop(buildContext);
-              },
-              child: const Text("Cancel"),
-            ),
-          )
-        ],
+            const SizedBox(height: 20,),
+            Ink(
+              height: ScreenUtils.screenHeight(buildContext)*0.04,
+              width: ScreenUtils.screenWidth(buildContext)*0.4,
+              child: InkWell(
+                onTap: (){
+                  Navigator.pop(buildContext);
+                },
+                child: Center(child: const Text("Cancel",style: TextStyle(fontSize: 18))),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
