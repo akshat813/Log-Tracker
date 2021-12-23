@@ -18,16 +18,24 @@ class CapturedDetailsScreen extends StatelessWidget {
           },
             icon:const Icon(Icons.arrow_back_ios)),
         backgroundColor: Colors.black,
-        title: const Text("Details"),
+        title: const Text("Details",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold ),),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const SizedBox(height: 50,),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Center(child: Image.file(File(file!.path))),
-              Center(child: Image.file(File(selfie!.path))),
+              Text("MACHINE"),
+              Text("SELFIE"),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Image.file(File(file!.path),height: 200,width: 200,),
+              Image.file(File(selfie!.path),height: 200,width: 150,),
             ],
           ),
           const SizedBox(height: 40,),

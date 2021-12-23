@@ -71,9 +71,9 @@ class Dashboard extends StatelessWidget {
                   width: ScreenUtils.screenWidth(context)*0.5,
                   child: InkWell(
                     child: Image.asset("assets/icons/scanqr.png",),
-                  onTap: () async {
-                    await showDialog(context: context, builder: (_) => cameraDialogBox(context),
-                    );
+                  onTap: () {
+                    Navigator.push(context,MaterialPageRoute(builder: (context)=> const ScanQrScreen()));
+                    // await showDialog(context: context, builder: (_) => cameraDialogBox(context),);
                   },),
                 )
                     :
@@ -109,41 +109,5 @@ class Dashboard extends StatelessWidget {
     );
   }
 
-  Widget cameraDialogBox(BuildContext buildContext)
-  {
-    return AlertDialog(
-      title: const Text("Upload File!"),
-      content: Container(
-        height: ScreenUtils.screenHeight(buildContext)*0.1,
-        width: ScreenUtils.screenWidth(buildContext)*0.6,
-        child: Column(
-          children: [
-            Ink(
-              height: ScreenUtils.screenHeight(buildContext)*0.03,
-              width: ScreenUtils.screenWidth(buildContext)*0.4,
-              child: InkWell(
-                onTap: (){
-                  Navigator.push(buildContext,MaterialPageRoute(builder: (context)=>
-                  const ScanQrScreen()
-                  ));
-                },
-                child: Center(child: const Text("Take Photo",style: TextStyle(fontSize: 18),)),
-              ),
-            ),
-            const SizedBox(height: 20,),
-            Ink(
-              height: ScreenUtils.screenHeight(buildContext)*0.04,
-              width: ScreenUtils.screenWidth(buildContext)*0.4,
-              child: InkWell(
-                onTap: (){
-                  Navigator.pop(buildContext);
-                },
-                child: Center(child: const Text("Cancel",style: TextStyle(fontSize: 18))),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
+
 }

@@ -99,9 +99,7 @@ class _QrDataScreenState extends State<QrDataScreen> {
                         var status2 = await Permission.microphone.status;
                         if(status1.isGranted && status2.isGranted && (file==null))
                           {
-                            file =  await Navigator.push(context, MaterialPageRoute(builder: (context)=>const CameraPage()));
-                            setState(() {
-                            });
+                            await showDialog(context: context, builder: (_) => cameraDialogBox(context),);
                           }
                         else
                           {
@@ -117,7 +115,6 @@ class _QrDataScreenState extends State<QrDataScreen> {
                                 Fluttertoast.showToast(msg: "Already captured",backgroundColor: Colors.red);
                               }
                           }
-
                         },
                       color: Colors.black,
                         child: const Text("Capture Log Data",style: TextStyle(color: Colors.white),),
@@ -130,14 +127,6 @@ class _QrDataScreenState extends State<QrDataScreen> {
                               selfieController != null?
                               onTakePictureButtonPressed()
                                   : null;
-                              // if(selfieFile!=null)
-                              //   {
-                              //     //NAVIGATE TO DETAILS PAGE AND SAVE IN DB
-                              //   }
-                              // else
-                              //   {
-                              //     Fluttertoast.showToast(msg: "Try later",backgroundColor: Colors.red);
-                              //   }
                             }
                           else
                             {
@@ -236,4 +225,41 @@ class _QrDataScreenState extends State<QrDataScreen> {
     //await db.insert("LOGS", {});
   }
 
+  Widget cameraDialogBox(BuildContext buildContext)
+  {
+    return AlertDialog(
+      title: const Text("Upload File!"),
+      content: SizedBox(
+        height: ScreenUtils.screenHeight(buildContext)*0.1,
+        width: ScreenUtils.screenWidth(buildContext)*0.6,
+        child: Column(
+          children: [
+            Ink(
+              height: ScreenUtils.screenHeight(buildContext)*0.03,
+              width: ScreenUtils.screenWidth(buildContext)*0.4,
+              child: InkWell(
+                onTap: () async {
+                  file =  await Navigator.push(context, MaterialPageRoute(builder: (context)=>const CameraPage()));
+                   setState(() {
+                   });
+                   },
+                child: const Center(child: Text("Take Photo",style: TextStyle(fontSize: 18),)),
+              ),
+            ),
+            const SizedBox(height: 20,),
+            Ink(
+              height: ScreenUtils.screenHeight(buildContext)*0.04,
+              width: ScreenUtils.screenWidth(buildContext)*0.4,
+              child: InkWell(
+                onTap: (){
+                  Navigator.pop(buildContext);
+                },
+                child: const Center(child: Text("Cancel",style: TextStyle(fontSize: 18))),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }
