@@ -1,11 +1,16 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:log_tracker/Constants/preferences.dart';
+import 'package:log_tracker/Models/user.dart';
+import 'package:log_tracker/Screens/dashboard.dart';
 import 'package:log_tracker/Screens/register_user.dart';
 import 'package:log_tracker/Utilities/screen_utils.dart';
 import 'package:log_tracker/main.dart';
 import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -16,8 +21,9 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  TextEditingController userIdCont = TextEditingController();
+  TextEditingController userNameCont = TextEditingController();
   TextEditingController passCont = TextEditingController();
+  late SharedPreferences prefs;
 
   @override
   void initState() {
@@ -40,6 +46,32 @@ class _SignInScreenState extends State<SignInScreen> {
     try {
       db = await openDatabase(path);
       print("DB OPENED ${db}");
+      await db.execute("CREATE TABLE IF NOT EXISTS LOG_USERS(USERNAME TEXT PRIMARY KEY, EMAIL TEXT, PASSWORD TEXT, USER_TYPE TEXT)");
+      print("table create -> LOG_USERS");
+      var length = Sqflite
+          .firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM LOG_USERS'));
+      if(length!<=0)
+        {
+          await db.rawInsert("INSERT INTO LOG_USERS VALUES('logtrackeradmin','1234@','Tr@cker@Log2021','admin')");
+          await db.rawInsert("INSERT INTO LOG_USERS VALUES('singhadminchandan','1234@','Singh@dmin2021','admin')");
+          await db.rawInsert("INSERT INTO LOG_USERS VALUES('user1','1234@','1234','admin')");
+          await db.rawInsert("INSERT INTO LOG_USERS VALUES('user2','1234@','1234','user')");
+          print("ADMIN_USERS_INSERTED");
+        }
+      else
+        {
+          print("ADMIN_USERS_FOUND");
+          List<Map> userList = await db.rawQuery('SELECT * FROM LOG_USERS');
+          users = [];
+          for (int i = 0; i < userList.length; i++) {
+            users.add(User(
+                userName: userList[i]["USERNAME"].toString(),
+                email: userList[i]["EMAIL"].toString(),
+                password: userList[i]["PASSWORD"].toString(),
+                userType: userList[i]["USER_TYPE"].toString()
+            ));
+          }
+        }
     } catch (e) {
       print("Error $e");
     }
@@ -53,7 +85,7 @@ class _SignInScreenState extends State<SignInScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
               Image.asset("assets/icons/company.png"),
@@ -64,10 +96,9 @@ class _SignInScreenState extends State<SignInScreen> {
                             color: Colors.black
                         )
                     ),
-                    hintText: "User Id"
+                    hintText: "User Name"
                 ),
-                controller: userIdCont,
-
+                controller: userNameCont,
               ),
               TextField(
                 decoration: const InputDecoration(
@@ -88,19 +119,45 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
                 child: MaterialButton(
                     onPressed: (){
-                  String id = userIdCont.text.trim();
+                  String id = userNameCont.text.trim();
                   String pass = passCont.text.trim();
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const RegisterUserScreen()));
+                  for(int i = 0; i< users.length;i++)
+                    {
+                      if(users[i].userName== id)
+                        {
+                          if(users[i].password==pass)
+                            {
+                              accountType = users[i].userType;
+                              accountUserName = users[i].userName;
+                              setPrefValue(users[i].userType);
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> Dashboard()));
+                              break;
+                            }
+                          else
+                            {
+                              Fluttertoast.showToast(msg: "Password invalid");
+                              print("Invalid password entered");
+                              return;
+                            }
+                        }
+                    }
                   },
                     elevation: 0,
                     color: Colors.black,
                     child: const Text("Sign In",style: TextStyle(color: Colors.white,fontSize: 18),)),
               )
-
             ],
           ),
         ),
       ),
     );
+  }
+  
+  void setPrefValue(String? type) async
+  {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString(USERNAME,userNameCont.text.trim());
+    prefs.setString(PASSWORD,passCont.text.trim());
+    prefs.setString(ACCOUNT_TYPE,type!);
   }
 }

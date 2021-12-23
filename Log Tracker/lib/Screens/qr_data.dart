@@ -175,7 +175,7 @@ class _QrDataScreenState extends State<QrDataScreen> {
             String dateTime = DateTime.now().toString();
             print("date $dateTime");
             insertIntoDb(base64Encode(logPicBytes),base64Encode(selfieBytes),widget.qrData??dataInQr,dateTime);
-            Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context)=>CapturedDetailsScreen(file: file!, data: widget.qrData??dataInQr??"")), (route) => false);
+            Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context)=>CapturedDetailsScreen(file: file!, selfie: selfieFile!,data: widget.qrData??dataInQr??"")), (route) => false);
           }
         }
       });
@@ -218,7 +218,7 @@ class _QrDataScreenState extends State<QrDataScreen> {
   void insertIntoDb(String log_image, String selfie, String data, String date) async
   {
     //print("Data_to_insert $log_image, $selfie, $data, $date");
-    await db.execute("CREATE TABLE IF NOT EXISTS LOGS(id INTEGER PRIMARY KEY, machine_image TEXT, selfie_image TEXT, log_data TEXT, date VARCHAR(20))");
+    await db.execute("CREATE TABLE IF NOT EXISTS LOGS(user_id TEXT PRIMARY KEY, machine_image TEXT, selfie_image TEXT, log_data TEXT, date VARCHAR(20))");
     print("table create -> logs");
     var length = Sqflite
         .firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM LOGS'));

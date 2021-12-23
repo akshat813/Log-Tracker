@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:log_tracker/Screens/dashboard.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:log_tracker/Utilities/screen_utils.dart';
+import 'package:log_tracker/main.dart';
 
 class RegisterUserScreen extends StatefulWidget {
   const RegisterUserScreen({Key? key}) : super(key: key);
@@ -16,12 +17,18 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
   TextEditingController emailIdCont = TextEditingController();
   TextEditingController passCont = TextEditingController();
   TextEditingController confirmPassCont = TextEditingController();
-  String radioGroup = 'User';
+  String radioGroup = 'user';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            icon:const Icon(Icons.arrow_back_ios)),
+        backgroundColor: Colors.black,
         title: const Text("Log Tracker"),
       ),
       body: SingleChildScrollView(
@@ -92,7 +99,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
                       children: [
                         const Text("Admin"),
                         Radio(
-                          value: 'Admin',
+                          value: 'admin',
                           groupValue: radioGroup,
                           onChanged: (value){
                             radioGroup = value.toString();
@@ -109,7 +116,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
                       children: [
                         const Text("User"),
                         Radio(
-                          value: 'User',
+                          value: 'user',
                           groupValue: radioGroup,
                           onChanged: (value){
                             radioGroup = value.toString();
@@ -153,11 +160,28 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
                     borderRadius: BorderRadius.circular(20)
                 ),
                 child: MaterialButton(onPressed: (){
-                  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=> const Dashboard()));
+                  if(userNameCont.text==null || designationCont.text==null ||
+                      departmentCont.text==null || radioGroup==null || radioGroup=="" || passCont.text==null
+                   || confirmPassCont.text==null)
+                    {
+                      Fluttertoast.showToast(msg: "Required fields empty!",backgroundColor: Colors.red);
+                      return;
+                    }
+                  if(passCont.text.trim()!=confirmPassCont.text.trim())
+                    {
+                      Fluttertoast.showToast(msg: "Password does not match",backgroundColor: Colors.red);
+                      return;
+                    }
+                  else{
+                    insertData(userNameCont.text.trim(),emailIdCont.text.trim(),passCont.text.trim(),radioGroup);
+                    Future.delayed(const Duration(milliseconds: 100));
+                    Navigator.pop(context);
+                  }
+                  //Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=> const Dashboard()));
                 },
                     elevation: 0,
                     color: Colors.black,
-                    child: const Text("Sign Up",style: TextStyle(color: Colors.white,fontSize: 18),)),
+                    child: const Text("Add New User",style: TextStyle(color: Colors.white,fontSize: 18),)),
               )
             ],
           ),
@@ -165,4 +189,12 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
       ),
     );
   }
+
+  void insertData(String userName, String email, String password, String type) async
+  {
+    await db.rawInsert("INSERT INTO LOG_USERS VALUES($userName,$email,$password,$type)");
+    print("added_new_user");
+    Fluttertoast.showToast(msg: "New user added",backgroundColor: Colors.green);
+  }
+
 }
