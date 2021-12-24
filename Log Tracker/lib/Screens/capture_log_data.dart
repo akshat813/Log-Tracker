@@ -41,7 +41,7 @@ class _CameraPageState extends State<CameraPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body:
-      imageFile ==null ?
+      imageFile == null ?
       Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -69,6 +69,7 @@ class _CameraPageState extends State<CameraPage> {
       )
       :
       Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           SizedBox(
             height: ScreenUtils.screenHeight(context)*0.9,
@@ -77,14 +78,20 @@ class _CameraPageState extends State<CameraPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              MaterialButton(onPressed: (){
-                Navigator.pop(context);
-                imageFile ==null;
+              MaterialButton(
+                minWidth: ScreenUtils.screenWidth(context)*0.4,
+                onPressed: (){
+                  print("IN_TAP=>imagefile==null");
+                  //controller.stopImageStream();
+                  controller.dispose();
+                  Navigator.pop(context,null);
               },
                 color: Colors.black,
                 child: const Text("Retry",style: TextStyle(color: Colors.white),),
               ),
-              MaterialButton(onPressed: (){
+              MaterialButton(
+                minWidth: ScreenUtils.screenWidth(context)*0.4,
+                onPressed: (){
                 Navigator.pop(context,imageFile);
                 //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>QrDataScreen()));
               },
@@ -106,6 +113,8 @@ class _CameraPageState extends State<CameraPage> {
            imageFile = file;
          });
          if (file != null) {
+           //Future.delayed(Duration(milliseconds: 200));
+           //controller.stopImageStream();
            print("CAPTURED");
          }
        }
@@ -137,42 +146,4 @@ class _CameraPageState extends State<CameraPage> {
      Fluttertoast.showToast(msg:'Error: ${e.code}\n${e.description}',backgroundColor: Colors.red);
    }
 }
-
-// class PictureWidget extends StatelessWidget {
-//   final XFile? picFile;
-//   const PictureWidget({Key? key,required this.picFile}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     File file = File(picFile!.path);
-//     return Scaffold(
-//       body: Column(
-//         children: [
-//           SizedBox(
-//             height: ScreenUtils.screenHeight(context)*0.9,
-//             child: Image.file(file),
-//           ),
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//             children: [
-//               MaterialButton(onPressed: (){
-//                 Navigator.pop(context);
-//               },
-//               color: Colors.black,
-//                 child: const Text("Retry",style: TextStyle(color: Colors.white),),
-//               ),
-//               MaterialButton(onPressed: (){
-//                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>QrDataScreen(file: imageFile,)));
-//               },
-//                 color: Colors.black,
-//                 child: const Text("Ok",style: TextStyle(color: Colors.white),),
-//               ),
-//             ],
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 

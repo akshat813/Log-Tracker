@@ -130,6 +130,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
                 ],
               ),
               TextField(
+                obscureText: true,
                 decoration: const InputDecoration(
                     border: UnderlineInputBorder(
                         borderSide:BorderSide(
@@ -143,6 +144,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
               ),
               const SizedBox(height: 10,),
               TextField(
+                obscureText: true,
                 decoration: const InputDecoration(
                     border: UnderlineInputBorder(
                         borderSide:BorderSide(
@@ -192,7 +194,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
 
   void insertData(String userName, String email, String password, String type) async
   {
-    await db.rawInsert("INSERT INTO LOG_USERS VALUES($userName,$email,$password,$type)");
+    await db.rawInsert("INSERT INTO LOG_USERS VALUES('${userName}','${email}','${password}','${type}')");
     print("added_new_user");
     Fluttertoast.showToast(msg: "New user added",backgroundColor: Colors.green);
   }

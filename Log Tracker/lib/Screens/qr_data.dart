@@ -27,6 +27,8 @@ class _QrDataScreenState extends State<QrDataScreen> {
 
   CameraController selfieController = CameraController(cameras[1], ResolutionPreset.low);
   XFile? selfieFile;
+  String userName  = "";
+  late SharedPreferences prefs;
 
   @override
   void initState() {
@@ -55,8 +57,9 @@ class _QrDataScreenState extends State<QrDataScreen> {
   }
 
   void getPrefValues() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     dataInQr = prefs.getString(QRDATA)??"";
+    userName = prefs.getString(USERNAME)??"";
   }
 
   @override
@@ -104,11 +107,21 @@ class _QrDataScreenState extends State<QrDataScreen> {
                         else
                           {
                             if(status1.isGranted && status2.isDenied) {
+                              Fluttertoast.showToast(msg: "Grant permission");
                               Permission.microphone.request();
-                            }
+                              if(status2.isGranted)
+                                {
+                                  await showDialog(context: context, builder: (_) => cameraDialogBox(context),);
+                                }
+                              }
                             else if (status2.isGranted && status1.isDenied)
                             {
+                              Fluttertoast.showToast(msg: "Grant permission");
                               Permission.camera.request();
+                              if(status1.isGranted)
+                                {
+                                  await showDialog(context: context, builder: (_) => cameraDialogBox(context),);
+                                }
                             }
                             else
                               {
@@ -141,7 +154,6 @@ class _QrDataScreenState extends State<QrDataScreen> {
                   const SizedBox(height: 40,)
                 ],
               ),
-              selfieFile!=null? Image.file(File(selfieFile!.path)) : Container()
             ],
           ),
         ),
@@ -209,18 +221,17 @@ class _QrDataScreenState extends State<QrDataScreen> {
 
   void insertIntoDb(String log_image, String selfie, String data, String date) async
   {
+    prefs = await SharedPreferences.getInstance();
+    String username = prefs.getString(USERNAME)??"";
     //print("Data_to_insert $log_image, $selfie, $data, $date");
-    await db.execute("CREATE TABLE IF NOT EXISTS LOGS(user_id TEXT PRIMARY KEY, machine_image TEXT, selfie_image TEXT, log_data TEXT, date VARCHAR(20))");
+    await db.execute("CREATE TABLE IF NOT EXISTS LOGS(user_id TEXT, machine_image TEXT, selfie_image TEXT, log_data TEXT, date VARCHAR(20))");
     print("table create -> logs");
     var length = Sqflite
         .firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM LOGS'));
 
-    Fluttertoast.showToast(msg: "data inserted in db");
-    String selfie="abc";
-    String log_image="abc";
-    String data="cde";
-    String date="efg";
-    await db.rawInsert("INSERT INTO LOGS VALUES(${length!+1},${log_image},${selfie},${data},${date})");
+    print("date_check ${date.substring(0,16)}");
+    Fluttertoast.showToast(msg: "Data submitted");
+    await db.rawInsert("INSERT INTO LOGS VALUES('${username!}','${log_image}','${selfie}','${data}','${date.substring(0,16)}')");
     print("Record_Inserted_In_Logs_SQLITE");
     //await db.insert("LOGS", {});
   }
@@ -239,6 +250,7 @@ class _QrDataScreenState extends State<QrDataScreen> {
               width: ScreenUtils.screenWidth(buildContext)*0.4,
               child: InkWell(
                 onTap: () async {
+                  Navigator.pop(buildContext);
                   file =  await Navigator.push(context, MaterialPageRoute(builder: (context)=>const CameraPage()));
                    setState(() {
                    });

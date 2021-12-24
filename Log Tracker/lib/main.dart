@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:log_tracker/Constants/preferences.dart';
+import 'package:log_tracker/Models/tracks.dart';
 import 'package:log_tracker/Models/user.dart';
 import 'package:log_tracker/Screens/dashboard.dart';
 import 'package:log_tracker/Screens/sign_in.dart';
@@ -13,7 +14,9 @@ bool loggedIn = false;
 String accountType="";
 String accountUserName="";
 List<Map> userList =[];
+List<Map> trackList =[];
 List<User> users = [];
+List<Tracks> tracks = [];
 
 
 void main() {

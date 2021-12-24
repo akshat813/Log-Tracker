@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:log_tracker/Constants/preferences.dart';
+import 'package:log_tracker/Screens/checked_tracks.dart';
 import 'package:log_tracker/Screens/register_user.dart';
 import 'package:log_tracker/Screens/scan_qr.dart';
 import 'package:log_tracker/Screens/sign_in.dart';
@@ -85,7 +86,7 @@ class Dashboard extends StatelessWidget {
                   child: InkWell(
                     child: Image.asset("assets/icons/checked_tracks.png"),
                     onTap: (){
-                      // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>))
+                      Navigator.push(context,MaterialPageRoute(builder: (context)=>const CheckedTracksScreen()));
                     },
                   ),
                 ),

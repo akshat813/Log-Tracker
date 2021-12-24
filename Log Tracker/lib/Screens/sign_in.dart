@@ -35,8 +35,11 @@ class _SignInScreenState extends State<SignInScreen> {
 
   void getCameras() async
   {
-    await [Permission.camera, Permission.microphone].request();
-    cameras = await availableCameras();
+    if(cameras.isEmpty)
+      {
+        await [Permission.camera, Permission.microphone].request();
+        cameras = await availableCameras();
+      }
   }
 
   void dbConnection() async
@@ -114,6 +117,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 controller: userNameCont,
               ),
               TextField(
+                obscureText: true,
                 decoration: const InputDecoration(
                     border: UnderlineInputBorder(
                         borderSide:BorderSide(
