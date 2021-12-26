@@ -32,7 +32,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Log Tracker',
       theme: ThemeData(
-        appBarTheme: const AppBarTheme(backgroundColor: Colors.black,titleTextStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.black,
+            titleTextStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18)),
         primarySwatch: Colors.blue,
       ),
       home: const SignInScreen(),

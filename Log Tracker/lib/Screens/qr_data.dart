@@ -44,9 +44,7 @@ class _QrDataScreenState extends State<QrDataScreen> {
 
   @override
   void dispose() {
-    if(selfieController!=null) {
-      //selfieController.dispose();
-    }
+      selfieController?.dispose();
     super.dispose();
   }
   

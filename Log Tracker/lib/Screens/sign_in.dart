@@ -37,7 +37,7 @@ class _SignInScreenState extends State<SignInScreen> {
   {
     if(cameras.isEmpty)
       {
-        await [Permission.camera, Permission.microphone].request();
+        await [Permission.camera, Permission.microphone,Permission.storage,Permission.manageExternalStorage].request();
         cameras = await availableCameras();
       }
   }
@@ -144,7 +144,6 @@ class _SignInScreenState extends State<SignInScreen> {
                       Fluttertoast.showToast(msg: "Fields cannot be empty",backgroundColor: Colors.red);
                       return;
                     }
-                  print("NON EMPTY");
                   print("LEN ${users.length}");
                   for(int i = 0; i< users.length;i++)
                     {
