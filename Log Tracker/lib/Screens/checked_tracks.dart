@@ -56,7 +56,6 @@ class _CheckedTracksScreenState extends State<CheckedTracksScreen> {
       ));
     }
     setState(() {
-
     });
   }
 
@@ -134,14 +133,7 @@ class _CheckedTracksScreenState extends State<CheckedTracksScreen> {
           const SizedBox(height: 15,),
           accountType=="admin"?
           MaterialButton(onPressed: () async {
-            createPdf(
-                context,
-                base64Decode(tracks[i].machineImage),
-                base64Decode(tracks[i].selfieImage),
-                tracks[i].logData,
-                tracks[i].captureDate,
-                tracks[i].userName
-            );
+            createPdf(context, machine_image, selfie_image, logData, date, userName);
             String timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
             //final file = File('logs_$timeStamp.pdf');
             print("created");
@@ -164,7 +156,7 @@ class _CheckedTracksScreenState extends State<CheckedTracksScreen> {
     );
   }
 
-  Future<void> addPageInPdfFile(BuildContext buildContext, Uint8List machine_image, Uint8List selfie_image, String logData, String date, String username) async {
+  Future<void> createPdf(BuildContext buildContext, Uint8List machine_image, Uint8List selfie_image, String logData, String date, String username) async {
     final machineImage = pw.MemoryImage(machine_image,);
     final selfieImage = pw.MemoryImage(selfie_image,);
     print("IN ADD PAGE");
