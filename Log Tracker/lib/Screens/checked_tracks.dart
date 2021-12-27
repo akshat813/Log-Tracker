@@ -84,6 +84,7 @@ class _CheckedTracksScreenState extends State<CheckedTracksScreen> {
               itemBuilder: (context,index){
                 return tracks.isNotEmpty ?
                 checkedDataWidget(
+                    tracks[index].userName.toString(),
                     base64Decode(tracks[index].machineImage),
                     base64Decode(tracks[index].selfieImage),
                     tracks[index].logData,
@@ -129,7 +130,7 @@ class _CheckedTracksScreenState extends State<CheckedTracksScreen> {
     );
   }
 
-  Widget checkedDataWidget(Uint8List machine_image, Uint8List selfie_image, String logData, String date)
+  Widget checkedDataWidget(String userName ,Uint8List machine_image, Uint8List selfie_image, String logData, String date)
   {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -157,7 +158,7 @@ class _CheckedTracksScreenState extends State<CheckedTracksScreen> {
               accountType=="admin" ? Image.memory(selfie_image,height:ScreenUtils.screenHeight(context)*0.4 ,width: ScreenUtils.screenWidth(context)*0.4,) : Container(),
             ],
           ),
-          Text("${logData+" \nDate : "+date}",style: TextStyle(fontSize: 15),),
+          Text("${logData+" \nDate : "+date + "\nUsername : "+userName}",style: TextStyle(fontSize: 15),),
           const SizedBox(height: 15,),
           Container(height: 1,width: ScreenUtils.screenWidth(context)*0.95,color: Colors.black,)
         ],

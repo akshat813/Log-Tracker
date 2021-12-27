@@ -67,28 +67,40 @@ class Dashboard extends StatelessWidget {
               children : [
                 const SizedBox(height: 120,),
                 accountType!="" && accountType!="admin"?
-                Ink(
-                  height: ScreenUtils.screenHeight(context)*0.2,
-                  width: ScreenUtils.screenWidth(context)*0.5,
-                  child: InkWell(
-                    child: Image.asset("assets/icons/scanqr.png",),
-                  onTap: () {
-                    Navigator.push(context,MaterialPageRoute(builder: (context)=> const ScanQrScreen()));
-                    // await showDialog(context: context, builder: (_) => cameraDialogBox(context),);
-                  },),
+                Column(
+                  children: [
+                    Ink(
+                      height: ScreenUtils.screenHeight(context)*0.2,
+                      width: ScreenUtils.screenWidth(context)*0.5,
+                      child: InkWell(
+                        child: Image.asset("assets/icons/scanqr.png",),
+                      onTap: () {
+                        Navigator.push(context,MaterialPageRoute(builder: (context)=> const ScanQrScreen()));
+                        // await showDialog(context: context, builder: (_) => cameraDialogBox(context),);
+                      },),
+                    ),
+                    const SizedBox(height: 12),
+                    const Text("Scan Track",style: TextStyle(fontSize: 17,color: Colors.black),)
+                  ],
                 )
                     :
                 Container(),
                 const SizedBox(height: 80,),
-                Ink(
-                  height: ScreenUtils.screenHeight(context)*0.2,
-                  width: ScreenUtils.screenWidth(context)*0.5,
-                  child: InkWell(
-                    child: Image.asset("assets/icons/checked_tracks.png"),
-                    onTap: (){
-                      Navigator.push(context,MaterialPageRoute(builder: (context)=>const CheckedTracksScreen()));
-                    },
-                  ),
+                Column(
+                  children: [
+                    Ink(
+                      height: ScreenUtils.screenHeight(context)*0.2,
+                      width: ScreenUtils.screenWidth(context)*0.5,
+                      child: InkWell(
+                        child: Image.asset("assets/icons/checked_tracks.png"),
+                        onTap: (){
+                          Navigator.push(context,MaterialPageRoute(builder: (context)=>const CheckedTracksScreen()));
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    const Text("Checked Tracks",style: TextStyle(fontSize: 17,color: Colors.black),)
+                  ],
                 ),
                 const SizedBox(height: 100,),
                 accountType!="" && accountType=="admin"?
