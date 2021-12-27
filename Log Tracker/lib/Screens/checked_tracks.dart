@@ -96,34 +96,6 @@ class _CheckedTracksScreenState extends State<CheckedTracksScreen> {
               shrinkWrap: true,
             ),
             const SizedBox(height: 50,),
-            accountType=="admin"?
-            MaterialButton(onPressed: () async {
-              for(int i=0; i< tracks.length; i++)
-                {
-                  addPageInPdfFile(
-                      context,
-                      base64Decode(tracks[i].machineImage),
-                      base64Decode(tracks[i].selfieImage),
-                      tracks[i].logData,
-                      tracks[i].captureDate
-                  );
-                }
-              String timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
-              //final file = File('logs_$timeStamp.pdf');
-              print("created");
-              String directory = (await getApplicationDocumentsDirectory()).path;
-              final file = File('$directory/logs_$timeStamp.pdf');
-              await file.writeAsBytes(await pdfDoc.save()).then((value){
-                print("done");
-                OpenFile.open('$directory/logs_$timeStamp.pdf');
-              });
-
-              },
-              color: Colors.black,
-              minWidth: ScreenUtils.screenWidth(context)*0.6,
-              child: const Text("Download Report",style: TextStyle(color: Colors.white),),)
-                :
-            Container()
           ],
         ),
       ),
@@ -160,13 +132,39 @@ class _CheckedTracksScreenState extends State<CheckedTracksScreen> {
           ),
           Text("${logData+" \nDate : "+date + "\nUsername : "+userName}",style: TextStyle(fontSize: 15),),
           const SizedBox(height: 15,),
+          accountType=="admin"?
+          MaterialButton(onPressed: () async {
+            createPdf(
+                context,
+                base64Decode(tracks[i].machineImage),
+                base64Decode(tracks[i].selfieImage),
+                tracks[i].logData,
+                tracks[i].captureDate,
+                tracks[i].userName
+            );
+            String timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
+            //final file = File('logs_$timeStamp.pdf');
+            print("created");
+            String directory = (await getApplicationDocumentsDirectory()).path;
+            final file = File('$directory/logs_$timeStamp.pdf');
+            await file.writeAsBytes(await pdfDoc.save()).then((value){
+              print("done");
+              OpenFile.open('$directory/logs_$timeStamp.pdf');
+            });
+
+          },
+            color: Colors.black,
+            minWidth: ScreenUtils.screenWidth(context)*0.6,
+            child: const Text("Download Report",style: TextStyle(color: Colors.white),),)
+              :
+          Container(),
           Container(height: 1,width: ScreenUtils.screenWidth(context)*0.95,color: Colors.black,)
         ],
       ),
     );
   }
 
-  Future<void> addPageInPdfFile(BuildContext buildContext, Uint8List machine_image, Uint8List selfie_image, String logData, String date) async {
+  Future<void> addPageInPdfFile(BuildContext buildContext, Uint8List machine_image, Uint8List selfie_image, String logData, String date, String username) async {
     final machineImage = pw.MemoryImage(machine_image,);
     final selfieImage = pw.MemoryImage(selfie_image,);
     print("IN ADD PAGE");
@@ -198,7 +196,7 @@ class _CheckedTracksScreenState extends State<CheckedTracksScreen> {
                   ],
                 ),
                 pw.SizedBox(height: 50),
-                pw.Text("${logData+" \nDate : "+date}",style: const pw.TextStyle(fontSize: 18),),
+                pw.Text("${logData+" \nDate : "+date+"\nUserName : "+username}",style: const pw.TextStyle(fontSize: 18),),
               ],
             ),
           )
