@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:log_tracker/Constants/preferences.dart';
+import 'package:log_tracker/Screens/admin_control.dart';
 import 'package:log_tracker/Screens/checked_tracks.dart';
 import 'package:log_tracker/Screens/register_user.dart';
 import 'package:log_tracker/Screens/scan_qr.dart';
@@ -104,13 +105,26 @@ class Dashboard extends StatelessWidget {
                 ),
                 const SizedBox(height: 100,),
                 accountType!="" && accountType=="admin"?
-                MaterialButton(
-                  minWidth: ScreenUtils.screenWidth(context)*0.7,
-                  onPressed: (){
-                    Navigator.push(context,MaterialPageRoute(builder: (context)=>const RegisterUserScreen()));
-                  },
-                  color: Colors.black,
-                  child: const Text("Add New User",style: TextStyle(fontSize: 18,color: Colors.white),)
+                Column(
+                  children: [
+                    MaterialButton(
+                      minWidth: ScreenUtils.screenWidth(context)*0.7,
+                      onPressed: (){
+                        Navigator.push(context,MaterialPageRoute(builder: (context)=>const RegisterUserScreen()));
+                      },
+                      color: Colors.black,
+                      child: const Text("Add New User",style: TextStyle(fontSize: 18,color: Colors.white),)
+                    ),
+                    const SizedBox(height: 50,),
+                    MaterialButton(
+                        minWidth: ScreenUtils.screenWidth(context)*0.7,
+                        onPressed: (){
+                          Navigator.push(context,MaterialPageRoute(builder: (context)=>const AdminControlScreen()));
+                        },
+                        color: Colors.black,
+                        child: const Text("Admin Control",style: TextStyle(fontSize: 18,color: Colors.white),)
+                    ),
+                  ],
                 )
                     :
                 Container(),
