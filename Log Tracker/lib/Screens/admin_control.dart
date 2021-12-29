@@ -19,6 +19,7 @@ class _AdminControlScreenState extends State<AdminControlScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Admin Control",style: TextStyle(fontSize: 17,color: Colors.white),),
+        leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: const Icon(Icons.arrow_back,color: Colors.white,)),
         backgroundColor: Colors.black,
       ),
       body: loader == true ?

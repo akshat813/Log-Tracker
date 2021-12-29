@@ -69,9 +69,9 @@ class _CheckedTracksScreenState extends State<CheckedTracksScreen> {
       appBar: AppBar(
         title: const Text("Checked Tracks"),
         centerTitle: true,
+        leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: const Icon(Icons.arrow_back,color: Colors.white,)),
       ),
-      body:
-      tracks.isEmpty ?
+      body: tracks.isEmpty ?
        const Center(child: CircularProgressIndicator(color: Colors.black,))
           :
       SingleChildScrollView(
